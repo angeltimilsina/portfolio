@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angel Timilsina | Secure Intelligent Systems</title>
+    <meta name="description"
+        content="Angel Timilsina — Cybersecurity + AI + Blockchain builder. Founder of Cybeetle, FavorNinja, and Bidesh.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-void: #0a1a2f;
+            /* Deep navy blue */
+            --accent-navy: #1e3a5f;
+            /* Softer navy */
+            --text-white: #f0f4ff;
+            /* Soft white text */
+            --text-grey: #a0b0c8;
+            /* Grey dim text */
+            --highlight-gold: #d4af37;
+            /* Rich golden yellow */
+            --highlight-gold-soft: #f0c674;
+            /* Softer gold for glows */
+            --glass-bg: rgba(30, 58, 95, 0.18);
+            --glass-border: rgba(212, 175, 55, 0.25);
+            --font-heading: 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+            --font-mono: 'Share Tech Mono', monospace;
+        }
+
+        [data-theme="light"] {
+            --bg-void: #f0f4ff;
+            --accent-navy: #0a1a2f;
+            --text-white: #0a1a2f;
+            --text-grey: #5a6a8a;
+            --highlight-gold: #b8860b;
+            --highlight-gold-soft: #d4af37;
+            --glass-bg: rgba(10, 26, 47, 0.08);
+            --glass-border: rgba(212, 175, 55, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-void);
+            color: var(--text-white);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-title {
+            font-size: 4.2rem;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(90deg, var(--text-white), var(--highlight-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-mono);
+            color: var(--highlight-gold);
+            margin-top: 1.2rem;
+            font-size: 1.3rem;
+            letter-spacing: 4px;
+        }
+
+        main {
+            position: relative;
+            z-index: 10;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        #nebula-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orbital-nav {
+            position: fixed;
+            right: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--text-grey);
+            border-radius: 50%;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%) translateX(10px);
+            opacity: 0;
+            color: var(--text-white);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot:hover::after,
+        .nav-dot.active::after {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: var(--highlight-gold);
+            box-shadow: 0 0 10px var(--highlight-gold);
+            border-color: var(--highlight-gold);
+            transform: scale(1.3);
+        }
+
+        .theme-toggle {
+            margin-top: 2rem;
+            background: none;
+            border: 1px solid var(--text-white);
+            color: var(--text-white);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: 0 0 15px var(--highlight-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .glass-card,
+        .satellite-card,
+        .glass-container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            padding: 2.2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .floated-element {
+            animation: float 7s ease-in-out infinite;
+        }
+
+        .satellite-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 1300px;
+            margin-top: 3.5rem;
+        }
+
+        .satellite-card {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27), box-shadow 0.4s ease;
+        }
+
+        .satellite-card:hover {
+            transform: translateY(-18px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 175, 55, 0.35);
+            border-color: var(--highlight-gold);
+        }
+
+        .tech-stack span {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-grey);
+            border: 1px solid var(--text-grey);
+            padding: 4px 10px;
+            margin: 6px 4px 0 0;
+            border-radius: 4px;
+        }
+
+        .neon-btn {
+            display: inline-block;
+            margin-top: 1.8rem;
+            color: var(--text-white);
+            text-decoration: none;
+            font-family: var(--font-heading);
+            border-bottom: 2px solid var(--text-white);
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .neon-btn:hover {
+            color: var(--highlight-gold);
+            border-bottom-color: var(--highlight-gold);
+            text-shadow: 0 0 12px var(--highlight-gold);
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+            margin-top: 2.5rem;
+        }
+
+        .contact-node {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.3rem;
+            background: rgba(240, 244, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: var(--text-white);
+            font-family: var(--font-mono);
+            transition: 0.3s;
+        }
+
+        .contact-node:hover {
+            background: rgba(212, 175, 55, 0.08);
+            border-color: var(--text-white);
+            padding-left: 1.8rem;
+        }
+
+        .node-status {
+            color: var(--highlight-gold);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-24px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .orbital-nav {
+                right: 1.2rem;
+                gap: 1.6rem;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .satellite-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body data-theme="dark">
+    <canvas id="nebula-canvas"></canvas>
+
+    <nav class="orbital-nav">
+        <div class="orbit-track">
+            <a href="#home" class="nav-dot active" data-label="HOME"></a>
+            <a href="#about" class="nav-dot" data-label="ABOUT"></a>
+            <a href="#projects" class="nav-dot" data-label="PROJECTS"></a>
+            <a href="#contact" class="nav-dot" data-label="CONTACT"></a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dimension">
+            <span class="toggle-icon">◈</span>
+        </button>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <section id="home">
+            <div class="content-wrapper">
+                <h1 class="hero-title">ANGEL TIMILSINA</h1>
+                <p class="hero-subtitle">BUILDER OF SECURE INTELLIGENT SYSTEMS</p>
+                <p
+                    style="max-width: 680px; margin-top: 2.5rem; font-size: 1.15rem; line-height: 1.7; text-align: center;">
+                    Cybersecurity × AI × Blockchain founder creating execution-first products: secure systems, agentic
+                    workflows, and platforms that convert intent into measurable outcomes.
+                </p>
+            </div>
+        </section>
+
+        <!-- About -->
+        <section id="about">
+            <div class="glass-card floated-element">
+                <h2>Core Directive</h2>
+                <div style="font-family: var(--font-mono); line-height: 1.9; font-size: 1.05rem;">
+                    <p>> Focus: Practical systems at the intersection of security, automation, and emerging tech</p>
+                    <p>> Principles: Security-first • Clarity over hype • Evidence & iteration • Builders win •
+                        Long-term value creation</p>
+                    <br>
+                    <p>Obsessed with translating intention into reliable, measurable execution. Building tools where
+                        outcomes are visible, improvable, and trustworthy — from LLM security assistants to hybrid
+                        human-AI workflows and ethical edtech infrastructure.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section id="projects">
+            <h2 class="section-title" style="margin-bottom: 3rem;">Active Deployments</h2>
+            <div class="satellite-grid">
+                <div class="satellite-card">
+                    <h3>FavorNinja</h3>
+                    <p>Task execution platform where workflows are assigned to humans, AI, or hybrid teams — with full
+                        visibility into duration, artifacts, proof-of-work, and accountability.</p>
+                    <div class="tech-stack">
+                        <span>AI + Human Coordination</span>
+                        <span>Task Lifecycle</span>
+                        <span>Proof-of-Work</span>
+                        <span>Automation</span>
+                    </div>
+                    <a href="https://favorninja.com/" class="neon-btn">Website</a>
+                </div>
+
+                <div class="satellite-card">
+                    <h3>Cybeetle</h3>
+                    <p>AI-powered security & systems modernization initiative — featuring an LLM security chatbot as the
+                        practical entry point for threat guidance and architecture upgrades.</p>
+                    <div class="tech-stack">
+                        <span>LLM Security Assistant</span>
+                        <span>Cloud Architecture</span>
+                        <span>Security Consulting</span>
+                    </div>
+                    <a href="https://chat.cybeetle.com" target="_blank" rel="noopener"
+                        class="neon-btn">chat.cybeetle.com →</a>
+                </div>
+
+                <div class="satellite-card">
+                    <h3>Bidesh</h3>
+                    <p>Student mobility & edtech platform concept with AI-driven scholarship matching, visa process
+                        guidance, and ethical recruitment flows.</p>
+                    <div class="tech-stack">
+                        <span>EdTech</span>
+                        <span>AI Guidance</span>
+                        <span>Ethical Systems</span>
+                    </div>
+                    <a href="https://bidesh.com.np" class="neon-btn">Website</a>
+                </div>
+
+                <div class="satellite-card">
+                    <h3>MicroTruth (Concept)</h3>
+                    <p>Exploration of ethical AI for detecting manipulation patterns in negotiations and interactions —
+                        prioritizing transparency without compromising privacy.</p>
+                    <div class="tech-stack">
+                        <span>Behavioral Signals</span>
+                        <span>Ethical AI</span>
+                        <span>Risk Scoring</span>
+                    </div>
+                    <a href="#" class="neon-btn">Research Notes (Coming Soon)</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section id="contact">
+            <div class="glass-container">
+                <h2>Establish Connection</h2>
+                <div class="contact-links">
+                    <a href="https://www.linkedin.com/in/angel-nath-timilsina-518191204/" target="_blank" rel="noopener"
+                        class="contact-node">
+                        <span class="node-icon">LINKEDIN</span>
+                        <span class="node-status">ONLINE</span>
+                    </a>
+                    <a href="https://x.com/angeltimilsina" target="_blank" rel="noopener" class="contact-node">
+                        <span class="node-icon">X / @angeltimilsina</span>
+                        <span class="node-status">ACTIVE</span>
+                    </a>
+                    <a href="https://github.com/angeltimilsina" target="_blank" rel="noopener" class="contact-node">
+                        <span class="node-icon">GITHUB</span>
+                        <span class="node-status">HERE</span>
+                    </a>
+                    <a href="mailto:angel@favorninja.com" class="contact-node">
+                        <span class="node-icon">EMAIL</span>
+                        <span class="node-status">SEND</span>
+                    </a>
+                </div>
+                <p style="margin-top: 2.5rem; font-size: 0.95rem; color: var(--text-grey); text-align: center;">
+                    If you're building something ambitious and need a security-minded operator who ships, reach out.
+                    Keep it concise: problem, timeline, desired outcome.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Subtle particles in white + golden glow
+        const canvas = document.getElementById('nebula-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.2 + 0.8;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.color = Math.random() > 0.5 ? '#f0f4ff' : '#d4af37';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 40; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        initParticles();
+        animate();
+
+        // Nav active state
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(sec => {
+                if (window.scrollY >= sec.offsetTop - 250) current = sec.getAttribute('id');
+            });
+            document.querySelectorAll('.nav-dot').forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('href').slice(1) === current) dot.classList.add('active');
+            });
+        });
+
+        // Theme toggle
+        document.getElementById('theme-toggle').onclick = () => {
+            document.body.dataset.theme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+        };
+    </script>
+</body>
+
+</html>
